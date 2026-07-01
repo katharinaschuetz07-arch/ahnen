@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Die Ahnen – Lernedition 2.9.7</title>
+
+<style>
+
+body{
+margin:0;
+background:#000;
+color:#fff;
+font-family:serif;
+}
+
+.app{
+max-width:900px;
+margin:auto;
+padding:14px;
+border:2px solid #fff;
+border-radius:14px;
+position: relative;
+}
+ 
+/* HEADER WITH BOLD TITLE */
+header{
+text-align:center;
+margin-bottom:20px;
+}
+
+header h1{
+font-size:2.2rem;
+font-weight: bold;
+margin:2px 0;
+}
+
+header .meta{
+font-size:0.85rem;
+opacity:0.8;
+}
+
+/* START GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin-top:10px;
+}
+
+button{
+background:#000;
+color:#fff;
+border:1px solid #fff;
+padding:10px;
+border-radius:10px;
+font-family:serif;
+cursor: pointer;
+}
+
+button:hover {
+background: #222;
+}
+
+/* ZWISCHENÜBERSCHRIFT ÜBER DER LISTE */
+.section-title {
+text-align: center;
+font-size: 1.3rem;
+font-weight: bold;
+margin: 25px 0 12px 0;
+letter-spacing: 0.5px;
+}
+
+/* LIST WITHOUT BREAKING WRAPS */
+.list{
+text-align:center;
+font-size:0.95rem;
+line-height:1.6;
+margin-top:5px;
+}
+
+/* TWO BUTTONS */
+.section-buttons{
+display:flex;
+gap:8px;
+margin-top:12px;
+}
+
+.section-buttons button{
+flex:1;
+}
+
+/* PAGE */
+.page{display:none;}
+.page.active{display:block;}
+
+/* BAND HEADER */
+.bandheader{
+text-align:center;
+margin-bottom:15px;
+}
+
+.bandheader p{
+font-size:0.95rem;
+color: #fff;
+opacity:0.9;
+font-style: italic;
+margin: 5px 0;
+}
+
+/* EDLES LERNKARTEN-DESIGN */
+.card{
+background: #111;
+border:2px solid #fff;
+border-radius:16px;
+padding:30px 25px;
+min-height:240px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+line-height: 1.7;
+font-size: 1.15rem;
+box-shadow: 0 6px 20px rgba(255, 255, 255, 0.05);
+cursor: pointer;
+transition: transform 0.2s, background 0.2s;
+margin-bottom: 15px;
+}
+
+.card:hover {
+background: #161616;
+transform: scale(1.01);
+}
+
+/* STRUKTURIERTER INTERNER HEADER */
+.card-internal-header {
+text-align: center;
+width: 100%;
+margin-bottom: 20px;
+border-bottom: 1px dashed rgba(255,255,255,0.3);
+padding-bottom: 10px;
+}
+
+.card-line1 {
+font-size: 1.25rem;
+font-weight: bold;
+letter-spacing: 1.5px;
+margin-bottom: 2px;
+}
+
+.card-line2 {
+font-size: 0.9rem;
+opacity: 0.75;
+font-style: italic;
+}
+
+/* NAV & AUDIO AREA */
+.nav, .audio{
+display:flex;
+gap:10px;
+margin-top:12px;
+}
+
+.nav button, .audio button{
+flex:1;
+padding: 12px;
+font-size: 1rem;
+}
+
+/* MODAL WINDOWS */
+.modal {
+display: none; 
+position: fixed; 
+z-index: 2000; 
+left: 0;
+top: 0;
+width: 100%; 
+height: 100%; 
+background-color: rgba(0,0,0,0.8); 
+justify-content: center;
+align-items: center;
+}
+
+.modal-content {
+background-color: #111;
+color: #fff;
+padding: 25px;
+border: 2px solid #fff;
+border-radius: 12px;
+width: 90%;
+max-width: 550px;
+box-shadow: 0 4px 20px rgba(25,25,25,0.5);
+position: relative;
+}
+
+.modal h3 {
+color: #fff;
+margin-top: 0;
+font-size: 1.4rem;
+border-bottom: 1px solid #fff;
+padding-bottom: 8px;
+}
+
+.modal p, .modal div {
+color: #fff;
+}
+
+.close-modal-btn {
+background: #fff;
+color: #000;
+border: 1px solid #000;
+padding: 8px 16px;
+border-radius: 6px;
+margin-top: 15px;
+float: right;
+font-weight: bold;
+cursor: pointer;
+}
+
+.close-modal-btn:hover {
+background: #ccc;
+}
+
+/* FOOTER STRUCTURE */
+footer {
+margin-top: 30px;
+font-size: 0.85rem;
+border-top: 1px dashed rgba(255,255,255,0.2);
+padding-top: 15px;
+}
+
+.footer-top-line {
+text-align: center;
+opacity: 0.9;
+font-size: 0.95rem;
+margin-bottom: 10px;
+font-style: italic;
+}
+
+.footer-bottom-line {
+display: flex;
+justify-content: space-between;
+align-items: center;
+max-width: 600px;
+margin: 0 auto;
+}
+
+.footer-bottom-line a {
+color: #fff;
+text-decoration: none;
+cursor: pointer;
+opacity: 0.8;
+width: 100px;
+}
+
+.footer-bottom-line a.left-link {
+text-align: left;
+}
+
+.footer-bottom-line a.right-link {
+text-align: right;
+}
+
+.footer-bottom-line a:hover {
+opacity: 1;
+text-decoration: underline;
+}
+
+.footer-copyright {
+text-align: center;
+font-weight: normal;
+}
+
+/* 7,9-ZOLL-ANPASSUNG */
+@media screen and (min-width: 601px) and (max-width: 850px) {
+  header h1 {
+    font-size: 1.7rem !important;
+    line-height: 1.2;
+  }
+
+  .section-title {
+    font-size: 1.15rem !important;
+  }
+
+  .nav button, .audio button {
+    font-size: 0.9rem !important;
+    padding: 10px !important;
+  }
+
+  .footer-bottom-line {
+    font-size: 0.8rem !important;
+  }
+
+  .close-modal-btn {
+    position: sticky !important;
+    bottom: 10px;
+    right: 10px;
+    z-index: 9999 !important;
+    font-size: 0.9rem !important;
+    padding: 10px 18px !important;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+<h1>Die Ahnen</h1>
+<div class="meta">Lernedition 2.9.7 · Gustav Freytag</div>
+</header>
+
+<div id="home">
+
+<div class="grid">
+<button onclick="openBand(1)">Band 1</button>
+<button onclick="openBand(2)">Band 2</button>
+<button onclick="openBand(3)">Band 3</button>
+<button onclick="openBand(4)">Band 4</button>
+<button onclick="openBand(5)">Band 5</button>
+<button onclick="openBand(6)">Band 6</button>
+<button onclick="openBand(7)">Schluss</button>
+<button onclick="openBand(8)">Autor</button>
+</div>
+
+<div class="section-title">„Die Ahnen“ von Gustav Freytag</div>
+
+<div class="list">
+Ingo und Ingraban<br>
+Das Nest der Zaunkönige<br>
+Die Brüder vom deutschen Hause<br>
+Marcus König<br>
+Die Geschwister<br>
+Aus einer kleinen Stadt<br>
+Schluss der Ahnen
+</div>
+
+<div class="section-buttons">
+<button onclick="openPage('historie')">Historische Einordnung</button>
+<button onclick="openPage('gedanken')">Meine Gedanken</button>
+</div>
+
+</div>
+
+<div id="band" class="page">
+
+<div class="bandheader">
+<p id="band-meta">Band Meta</p>
+</div>
+
+<div class="card" id="card" onclick="autoNext()">
+    <div class="card-internal-header">
+        <div class="card-line1" id="card-header-line1">Band X</div>
+        <div class="card-line2" id="card-header-line2">Titel des Romans · Karte X / X</div>
+    </div>
+    <div id="card-text">Lade Erzählung...</div>
+</div>
+
+<div class="audio">
+<button onclick="speak()">🔊 Vorlesen</button>
+<button onclick="openYT()">🎧 Hörbuch (YouTube)</button>
+</div>
+
+<div class="nav">
+<button onclick="prev()">⬅</button>
+<button onclick="goHome()">🏠</button>
+<button onclick="next()">➡</button>
+</div>
+
+</div>
+
+<div id="historie" class="page">
+<h3 style="text-align:center">Historische Einordnung</h3>
+<p style="padding:10px">Interpretationen der Geschichtswissenschaft.</p>
+<button onclick="goHome()">Schließen</button>
+</div>
+
+<div id="gedanken" class="page">
+    <div class="bandheader">
+        <p>Persönliche Reflexion der Herausgeberin</p>
+    </div>
+
+    <div class="card" id="gedanken-card" onclick="gedankenNext()">
+        <div class="card-internal-header">
+            <div class="card-line1">Meine Gedanken</div>
+            <div class="card-line2" id="gedanken-header-line2">Persönliche Einordnung · Karte X / X</div>
+        </div>
+        <div id="gedanken-card-text">Lade Gedanken...</div>
+    </div>
+
+    <div class="audio">
+        <button onclick="speakGedanken()">🔊 Vorlesen</button>
+        <button style="visibility: hidden;">🎧 Platzhalter</button>
+    </div>
+
+    <div class="nav">
+        <button onclick="gedankenPrev()">⬅</button>
+        <button onclick="goHome()">🏠</button>
+        <button onclick="gedankenNext()">➡</button>
+    </div>
+</div>
+
+<div id="legal-impressum" class="modal" onclick="closeModalOnBackdrop(event, 'legal-impressum')">
+    <div class="modal-content">
+        <h3 style="text-align:center">Impressum</h3>
+        <div style="padding:10px; line-height:1.6; font-size:0.9rem; max-height:55vh; overflow-y:auto;">
+            <p><strong>Angaben gemäß § 5 DDG:</strong></p>
+            <p>Katharina Schütz<br>Lern-App „Die Ahnen“<br>Deutschland</p>
+            <p><strong>Kontakt:</strong><br>E-Mail: kontakt@lernapp-dieahnen.de</p>
+            <p><strong>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV:</strong><br>Katharina Schütz</p>
+            <p>© 2026 Alle Rechte vorbehalten.</p>
+        </div>
+        <button class="close-modal-btn" onclick="closeModal('legal-impressum')">Schließen</button>
+    </div>
+</div>
+
+<div id="legal-datenschutz" class="modal" onclick="closeModalOnBackdrop(event, 'legal-datenschutz')">
+    <div class="modal-content">
+        <h3 style="text-align:center">Datenschutz</h3>
+        <div style="padding:10px; line-height:1.5; font-size:0.85rem; max-height:55vh; overflow-y:auto;">
+            <p><strong>1. Datenschutz auf einen glance</strong><br>Diese Datenschutzerklärung informiert Sie über die Verarbeitung personenbezogonad Daten.</p>
+            <p><strong>2. Verantwortliche Stelle</strong><br>Katharina Schütz (Kontaktdaten siehe Impressum).</p>
+            <p><strong>3. Datenerfassung</strong><br>Diese application ist als rein lokale Struktur konzipiert. Es werden grundsätzlich keine personenbezogenen Daten erhoben.</p>
+            <p><strong>4. Kein Tracking</strong><br>In dieser App kommen keinerlei Tracking-Technologies oder Cookies zum Einsatz.</p>
+            <p><strong>5. Externe Links</strong><br>Die App enthält Verweise zu YouTube. Dort gelten die Bestimmungen des Drittanbieters.</p>
+        </div>
+        <button class="close-modal-btn" id="datenschutz-close" onclick="closeModal('legal-datenschutz')">Schließen</button>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-top-line">LernApp zu Die Ahnen von Gustav Freytag</div>
+    <div class="footer-bottom-line">
+        <a class="left-link" onclick="openModal('legal-impressum')">Impressum</a>
+        <div class="footer-copyright">© 2026 Lern App</div>
+        <a class="right-link" onclick="openModal('legal-datenschutz')">Datenschutz</a>
+    </div>
+</footer>
+
+</div>
+
+<script>
+
+let i = 0;
+let currentBand = 1;
+let currentCards = [];
+
+// Index für den eigenen "Meine Gedanken" Bereich
+let gIndex = 0;
+
+const bandData = {
+    1: {
+        numText: "Band 1",
+        titleShort: "Ingo und Ingraban",
+        meta: "Spätantike · Übergang Römerreich → Germanenwelt",
+        ytQuery: "ingo+und+ingraban+librivox",
+        cards: [
+            "Wir schreiben das vierte Jahrhundert nach der Zeitenwende. Im dichten, unwegsamen Thüringer Wald ringen germanische Stämme um ihre Heimat, während das mächtige Römische Reich jenseits der Grenzen unaufhaltsam zerfällt.",
+            "Da reitet ein stolzer, fremder Held durch das Dickicht, einsam und von Feinden gehetzt. Es ist Ingo, der flüchtige Fürstensohn aus dem edlen Geschlecht der Vandalen, dessen Heimat im Sturm der Völkerwanderung unterging.",
+            "Am gastlichen Hofe des Thüringerkönigs Answald sucht der heimatlose Wanderer Schutz. Seine edle Gestalt und sein kühner Blick verraten sofort, dass kein gewöhnlicher Krieger Einlass in die hölzerne Halle begehrt.",
+            "Schnell gewinnt der tapfere Vandale das Vertrauen der Krieger und das Wohlwollen des Königs. Doch es ist Irmgard, die wunderschöne Königstochter, deren Herz beim Anblick des stolzen Helden in tiefer Zuneigung entbrennt.",
+            "Doch finstere Schatten legen sich über das junge Glück, denn Neid und politisches Kalkül regieren die Gemüter. Missgünstige Fürsten wittern Verrat und drängen den König, den mächtigen Fremdling wieder zu vertreiben.",
+            "Das Schicksal fordert seinen Tribut und zwingt Ingo zur überstürzten Flucht aus dem Thüringer Land. Doch Irmgard, treu in ihrer unsterblichen Liebe, lässt ihr behütetes Leben zurück und folgt dem verbannten Helden in die Wildnis.",
+            "Gemeinsam trotzen die Liebenden den Gefahren der rauen Natur und der unerbittlichen Häscher. Sie begründen inmitten der dichten Wälder eine eigene, bescheidene Zuflucht, getragen von Mut und unerschütterlicher Hoffnung.",
+            "Doch der Frieden währt nur kurz, als die Flammen des Krieges ihre Zuflucht erreichen. In einem verzweifelten, heroischen Kampf verteidigt Ingo seine Familie und sein Gut gegen eine überwältigende Schar erbitterter Feinde.",
+            "Der erste Teil der großen Ahnenkette schließt sich im tragischen Untergang der stolzen Feste. Ingo und Irmgard finden den gemeinsamen Tod, doch ihr heldenhaftes Vermächtnis und ihr edles Blut leben in ihrem geretteten Kinde weiter.",
+            "Jahrhunderte verstreichen im unruhigen deutschen Land, und die Welt der alten Götter gerät ins Wanken. Wir schreiben das Jahr 724, als ein neuer Geist der Veränderung die tiefen Wälder Thüringens erfasst.",
+            "Aus dem Spross des alten Vandalenblutes ist Ingraban herangewachsen, un ungestümer und kühner Krieger. Er hütet stolz die Traditionen seiner Väter und verehrt die alten Götter im heiligen Hain.",
+            "Da erscheint ein mutiger Glaubensbote im Lande: Es ist der angelsächsische Mönch Winfried, den die Geschichte später Bonifatius nennen wird. Er zieht aus, um das Evangelium in die heidnischen Regionen zu tragen.",
+            "Mit mächtigen Axtschlägen bringt Winfried die heilige Donareiche zum Einsturz, das stolze Symbol des alten Glaubens. Die umherstehenden Heiden erstarren in Ehrfurcht, als der erwartete Zorn des Donnergottes ausbleibt.",
+            "Ingraban steht fassungslos vor den Trümmern der alten Weltordnung und spürt den unaufhaltsamen Wandel. Zwischen tiefer Treue zur Heimat und der Faszination des neuen Glaubens entbrennt ein schwerer Kampf in seiner Brust.",
+            "Auf seinen Wegen begegnet der junge Krieger der christlichen Jungfrau Walburg, die dem Schutz des Missionars untersteht. Ihr sanftes Wesen und ihr unerschütterlicher Glaube berühren Ingraban tief im Herzen.",
+            "Doch die alten Stammesbande sind grausam und fordern Rache für den Frevel an den alten Heiligtümern. Finstere Fehden brechen zwischen den christlichen Bekehrten und den unbeugsamen heidnischen Stämmen aus.",
+            "Inmitten dieser blutigen Wirren erweist sich Ingraban als edler Beschützer der Schwachen. Er rettet Walburg aus den Händen feindlicher Plünderer und besiegelt damit sein eigenes Schicksal.",
+            "Der innere Wandel vollzieht sich schließlich im Sakrament der Taufe, als Ingraban das Christentum annimmt. Er verbindet sich mit Walburg, wodurch sich das alte Heldenblut mit dem neuen Geist des Glaubens vereint.",
+            "Als kühner Grenzvogt im Dienste des Reiches verteidigt Ingraban fortan die Heimat gegen einfallende Horden. Seine Treue gilt nun dem Schutz der christlichen Gemeinden und dem Aufbau einer neuen Ordnung.",
+            "Doch die unerbittlichen Grenzkämpfe im Osten fordern den letzten, höchsten Einsatz von dem tapferen Führer. In einer schicksalhaften Schlacht wirft sich Ingraban den feindlichen Scharen mutig entgegen.",
+            "Der treue Held fällt auf dem Feld der Ehre, tief betrauert von seinem Volk und seiner liebenden Gattin. Sein Opfertod festigt das Fundament, auf dem die Zukunft des neuen Thüringer Landes ruht.",
+            "Walburg zieht sich in die Stille eines neugegründeten Klosters zurück, um das Andenken ihres Mannes zu bewahren. Sie widmet ihr Leben dem Gebet und der Erziehung ihres gemeinsamen Sohnes.",
+            "Aus der Asche der alten germanischen Stammeswelt erwächst langsam die geordnete Struktur des mittelalterlichen Reiches. Die Kultur der Schrift und des Glaubens schlägt tiefe Wurzeln in der thüringischen Erde.",
+            "Die Nachkommen Ingos und Ingrabans tragen das Erbe weiter durch die wechselvollen Epochen der deutschen Geschichte. Ihr Blut verbindet die wilde Freiheit der Ahnen mit der Kultur der neuen Zeit.",
+            "So endet der erste gewaltige Bogen der Ahnenreihe Gustav Freytags. Es ist eine zeitlose Saga von Liebe, Glauben und dem unaufhaltsamen Werden eines ganzen Volkes durch die Jahrhunderte hinweg."
+        ]
+    },
+    2: {
+        numText: "Band 2",
+        titleShort: "Das Nest der Zaunkönige",
+        meta: "Hochmittelalter · Das Jahr 1003 · Herrschaft von Kaiser Heinrich II.",
+        ytQuery: "das+nest+der+zaunkoenige+librivox",
+        cards: [
+            "Das Nest der Zaunkönige entführt uns in das Jahr 1003. Die Landschaften Thüringens stehen nun im Zeichen fester Burgen, stolzer Ritter und der unerbittlichen Reichspolitik des christlichen Mittelalters.",
+            "Im Zentrum der Chronik steht die weitverzweigte Sippe derer von Ilmburg. Wegen ihres trotzigen, freiheitsliebenden Wesens und ihrer wehrhaften Waldberg-Burg werden sie von den Nachbarn spöttisch die 'Zaunkönige' genannt.",
+            "Der ungestüme junge Ritter Immo, ein direkter Nachfahre Ingos, hütet das Erbe seiner Ahnen im Blut. Sein Stolz duldet keine Unterwerfung unter fremde Mächte, was rasch zu ersten Konflikten führt.",
+            "Kaiser Heinrich II. zieht mit strenger Hand durch das deutsche Land, um die Zentralmacht der Krone zu stärken. Die stolzen thüringischen Edelleute jedoch pochen unnachgiebig auf ihre alten, verbrieften Rechte.",
+            "Ein schwerer Streit entbrennt, als kaiserliche Abgesandte die Autorität der Ilmburger beschneiden wollen. Immo weist die Forderungen voller Zorn zurück und zieht damit das Auge des Herrschers auf seine Sippe.",
+            "Die kaiserlichen Truppen rüsten zum Feldzug, um den Widerstand im Thüringer Wald zu brechen. Das Nest der Zaunkönige sieht einer unbarmherzigen und entbehrungsreichen Belagerung entgegen.",
+            "Trotz der drohenden Katastrophe weigern sich die Brüder standhaft, die Waffen kampflos niederzulegen. Die Burgmauern trotzen den ersten heftigen Angriffen des kaiserlichen Heeres im dichten Tann.",
+            "Inmitten des auflodernden Krieges entfaltet sich eine schicksalhafte und zarte Liebe. Sie schlägt eine geheime Brücke zwischen dem belagerten Bollwerk und den Truppen des Kaisers vor den Toren.",
+            "Die Vorräte auf der Ilmburg schwinden von Tag zu Tag, und der Hunger wird zum unerbittlichen Feind. Dennoch bleibt der eiserne Überlebenswille der Zaunkönige ungebrochen.",
+            "Gustav Freytag zeichnet hier das meisterhafte Bild eines tiefgreifenden Epochenwechsels. Das raue Recht der Fehde und des Stärkeren prallt unaufhaltsam auf die neue, geordnete Gerichtsbarkeit des Reiches.",
+            "Als die kaiserliche Übermacht das äußere Tor durchbricht, entbrennt ein heroischer Nahkampf im Burghof. Immo verteidigt den inneren Kern des väterlichen Nestes mit letzter, verzweifelter Kraft.",
+            "Doch es ist nicht die bloße Waffengewalt, die das Schicksal der Ilmburger entscheidet. Die schmerzhafte Einsicht reift, dass der Frieden im Lande nur durch Opfer und Ordnung gesichert werden kann.",
+            "Um seine Familie vor dem endgültigen Untergang zu bewahren, entschließt sich das stolze Oberhaupt zu Verhandlungen. Ein schwerer Schritt, der den ungezähmten Geist der Ahnen tief auf die Probe stellt.",
+            "Der Kaiser fordert Sühne für den Trotz, erkennt aber gleichzeitig den unschätzbaren Mut und die Treue der Thüringer an. Die Bedingungen des Friedens greifen tief in das Leben der Sippe ein.",
+            "Die wehrhafte Ilmburg muss geschleift werden; das stolze Nest der Zaunkönige verliert seine Zinnen. Ein bitterer Moment für Immo, der die Trümmer der alten väterlichen Herrlichkeit betrachtet.",
+            "Doch das Blut der Ahnen lässt sich nicht durch fallende Steine bezwingen. Die Sippe gliedert sich ein in das neue Gefüge des Reiches und übernimmt wichtige Aufgaben im Dienste des Landes.",
+            "Immo reift vom wilden Heißsporn zu einem weisen und verantwortungsvollen Führer heran. Er erkennt, dass wahrer Edelmut sich in der Bewahrung des Rechts und dem Schutz der Schwachen zeigt.",
+            "Die Familie baut ein neues, offenes Heim im Tal, frei von den düsteren Zwängen der alten Raubritterfeste. Der Geist des Fortschritts zieht ein in die thüringischen Lande.",
+            "Kultur und Handwerk blühen auf, als die alten Fehden zwischen den Gauen endlich schweigen. Die Nachkommen der Zaunkönige fördern den Aufbau von Kirchen, Schulen und friedlichen Handelswegen.",
+            "Trotz der neuen Ordnung bleibt die mündliche Überlieferung der alten Heldentaten im Hause lebendig. Am Herdfeuer lauscht die Jugend noch immer gebannt den Sagen von Ingo und Ingraban.",
+            "Neue Prüfungen warten auf das Geschlecht, als die Unruhen an den Reichsgrenzen wieder aufflammen. Wieder ruft die Pflicht die Männer der Familie unter die Banner des Kaisers.",
+            "In fernen Feldzügen erwerben die Söhne der Zaunkönige neuen, rechtmäßigen Ruhm durch Tapferkeit und Treue. Sie sind nicht länger Rebellen, sondern geschätzte Stützen des gesamten Reiches.",
+            "Die Verbindung von stolzer Tradition und neuzeitlicher Pflicht prägt die nächste Generation der Familie. Der Stammbaum Freytags verzweigt sich weiter und schlägt tiefere Wurzeln im Herzen der Nation.",
+            "Mit dem Aufbau eines friedlichen, wohlhabenden Thüringens schließt sich dieses große Kapitel der Geschichte. Die wilde Freiheit der Frühzeit hat sich gewandelt in die schöpferische Kraft des Rittertums.",
+            "So endet die ergreifende Saga vom Nest der Zaunkönige. Sie zeigt uns, wie aus Trotz Loyalität erwächst und das alte Heldenblut der Vorfahren auch im geordneten Mittelalter seinen unsterblichen Glanz bewahrt."
+        ]
+    },
+    3: {
+        numText: "Band 3",
+        titleShort: "Die Brüder vom deutschen Hause",
+        meta: "Kreuzzugszeit · Zeitalter von Kaiser Friedrich Barbarossa",
+        ytQuery: "die+brueder+vom+deutschen+hause+librivox",
+        cards: [
+            "DIE BRÜDER VOM DEUTSCHEN HAUSE – Wir betreten das Jahr 1190. Ganz Europa steht im Bann der großen Kreuzzüge, und der legendäre Stauferkaiser Friedrich Barbarossa zieht mit einem gewaltigen Heer gen Osten.",
+            "Die Erben des alten Blutes haben sich im thüringischen Land weiter verzweigt. ritterliches Ehrgefühl, stolzer Familiensinn und tiefe christliche Frömmigkeit bestimmen das Denken dieser neuen Epoche.",
+            "Zwei ungleiche Brüder stehen im Mittelpunkt des Geschehens: Der kühne, lebenslustige Ritter Ivo und sein sanfter, gottesfürchtiger Bruder Karl, den es zu den geistlichen Pflichten zieht.",
+            "Das dumpfe Schlagen der Trommeln ruft die gesamte abendländische Ritterschaft zum Dritten Kreuzzup auf. Ivo packt voller Abenteuerlust seine Rüstung, um für Ruhm und den Kaiser zu fechten.",
+            "Karl hingegen wählt einen anderen Pfad: Er schließt sich den Brüdern des neu gegründeten Deutschen Ordens an. Seine Mission gilt nicht dem Hochmut des Schwertes, sondern der Pflege der Verwundeten.",
+            "Der unendlich weite und beschwerliche Weg nach Jerusalem fordert schreckliche Opfer unter den Kreuzfahrern. Krankheiten, Hunger und die glühende Hitze des Orients prüfen die Männer unbarmherzig.",
+            "Vor den mächtigen Toren der belagerten Stadt Akkon kreuzen sich die Wege der beiden Brüder wieder. Inmitten von Elend und Tod wird das Feldlazarett des Ordens zu einer Oase der Menschlichkeit.",
+            "Gustav Freytag schildert eindringlich das dramatische Aufeinandertreffen der europäischen Ritterkultur mit der hochentwickelten, faszinierenden Welt des morgenländischen Orients.",
+            "Kaiser Barbarossa findet im fernen Fluss Saleph einen unerwarteten, tragischen Tod. Das Kreuzheer stürzt in tiefe Bestürzung, und Ivo muss nun ohne seinen geliebten Führer um das Überleben kämpfen.",
+            "While Ivo auf dem Schlachtfeld in kühnen Gefechten nach weltlicher Ehre strebt, vollbringt Karl im Stillen Taten wahrer Nächstenliebe. Beide erfüllen das Erbe der Ahnen auf ihre Weise.",
+            "Nach Jahren bitterer Entbehrungen und geschlagener Schlachten führt das Schicksal die Brüder endlich heim. Sie kehren als reife, vom Leben gezeichnete Männer zurück in die thüringische Heimat.",
+            "Doch daheim wartet kein ungetrübter Frieden. Das Land ist gespalten, und gierige Nachbarn bedrohen die Güter der Sippe. Das im Orient gelobte ritterliche Ideal muss sich nun im Alltag bewähren.",
+            "Gemeinsam widmen sich Ivo und Karl dem Schutz der väterlichen Heimat. Die Errichtung einer festen Ordensniederlassung sichert den bleibenden, segensreichen Einfluss der Familie im thüringischen Gau.",
+            "Die alten, überlieferten Sagen der Ahnen vermischen sich am heimischen Herdfeuer nun mit den fernen, wunderbaren Geschichten aus dem geheimnisvollen Morgenland.",
+            "Die Jahre verstreichen, und der Deutsche Orden wächst zu einer mächtigen Institution heran. Karl leitet das 'Deutsche Haus' mit Weisheit und spendet den Armen und Kranken unermüdlich Trost.",
+            "Ivo gründet eine Familie und erzieht seine Söhne im Geiste von Tapferkeit und Gerechtigkeit. Er lehrt sie, dass eine schützende Hand wertvoller ist als ein blindwütig gezogenes Schwert.",
+            "Ein neuer Konflikt mit einem tyrannischen Raubritter der Nachbarschaft fordert Ivo heraus. Statt einer blutigen Fehde sucht er klug das Bündnis mit benachbarten Städten und dem fernen König.",
+            "Die Allianz gelingt, und der Landfrieden kann ohne sinnloses Blutvergießen gewahrt werden. Ein deutliches Zeichen, wie Recht und Gesetz die rohe Gewalt des Faustrechts verdrängen.",
+            "Karls Gesundheit schwindet unter den Lasten des aufopferungsvollen Dienstes im Hospital. Seine Brüder und die Familie pflegen ihn mit derselben Liebe, die er einst so vielen Fremden schenkte.",
+            "In einer feierlichen Stunde übergibt Karl das Amt an einen würdigen Nachfolger. Er segnet die Kinder seines Bruders und erinnert sie an die unvergängliche Kette ihrer heroischen Vorfahren.",
+            "Der sanfte Bruder schließt für immer die Augen. Sein Andenken wird im Thüringer Land wie das eines Heiligen geehrt, und sein Wirken hinterlässt tiefe Spuren des Friedens.",
+            "Ivo führt die Geschicke des Hauses im Alter mit milder Strenge weiter. Die thüringischen Ländereien blühen auf, Handwerk und Landwirtschaft bringen bescheidenen Wohlstand für alle.",
+            "Das ritterliche Zeitalter erreicht seinen glanzvollen Höhepunkt, doch am Horizont kündigen sich bereits die ersten gesellschaftlichen Veränderungen der kommenden Jahrhunderte an.",
+            "Die Enkel der Brüder blicken stolz auf das Erbe zurück, das von der Spätantike über das Rittertum bis in die Gegenwart des Hochmittelalters rein und unbescholten bewahrt wurde.",
+            "So schließt sich der majestätische Bogen des dritten Bandes. Es ist ein glänzendes Zeugnis von Pflichtgefühl, Opferbereitschaft und dem Wandel des alten Heldengeistes hin zu wahrer christlicher Nächstenliebe."
+        ]
+    },
+    4: {
+        numText: "Band 4",
+        titleShort: "Marcus König",
+        meta: "Reformationszeit · Zeitalter von Martin Luther",
+        ytQuery: "marcus+koenig+gustav+freytag+librivox",
+        cards: [
+            "MARCUS KÖNIG – Wir springen vorwärts in das aufgewühlte 16. Jahrhundert. Die Ära der alten Ritterburgen ist verblasst, stattdessen dominieren große Städte und der herbe Geist der Reformation das deutsche Land.",
+            "Das stolze Erbe der Ahnen hat seinen Sitz nun in einer wehrhaften Stadt an der Ostseeküste gefunden. Das bürgerliche Leben und der Fleiß an den heimischen Gestaden prägen das Leben der Generationen.",
+            "Im Zentrum steht der kühne Marcus König, un Nachfahre der alten Thüringer Sippen. Er verkörpert den neuen Typus des selbstbewussten, tatkräftigen deutschen Bürgers in unruhiger Zeit.",
+            "Die Thesen Martin Luthers verbreiten sich wie ein Lauffeuer im Reich und spalten Familien. Auch in Marcus Königs Heimatstadt entbrennt ein heftiger Kampf um das freie Wort und den rechten Glauben.",
+            "Marcus steht zwischen den starren Traditionen der alten Geschlechter und den mitreißenden, neuen Ideen der Reformation, die das gesamte Volk im Innersten ergreifen.",
+            "Neben den religiösen Wirren bedrohen kriegerische Unruhen und Nachbarfürsten den mühsam bewahrten Frieden der stolzen Stadtgemeinschaft an der Küste.",
+            "Als Ratsherr muss Marcus König all sein diplomatisches Geschick und seine Standfestigkeit aufbringen, um die Seinen vor dem Zugriff feindlicher Mächte zu schützen.",
+            "Gustav Freytag schildert farbenprächtig den gewaltigen Umbruch jener Tage: Das Erstarken der bürgerlichen Ordnung, den Einzug der Gelehrsamkeit und das Erwachen eines neuen Denkens.",
+            "Inmitten von städtischen Verträgen, religiösen Debatten und nächtlichen Unruhen entfaltet sich das persönliche Schicksal der Familie König in den wehrhaften Mauern.",
+            "Das Schicksal fordert schwere Entscheidungen von Marcus, als radikale Kräfte die mühsam bewahrte Ordnung in der Stadt umstürzen wollen und den Aufstand proben.",
+            "Mit Mut und bürgerlicher Besonnenheit stellt sich Marcus den Aufwieglern entgegen, um das Gemeinwesen und die mühsam errungene Freiheit des Gewissens zu verteidigen.",
+            "Die neue Lehre siegt schließlich in der Stadt, doch der Preis für den inneren Frieden und die Erneuerung war hoch und hinterlässt tiefe Spuren im Leben aller Bürger.",
+            "Unter den Bewohnern festigt sich ein neues Selbstbewusstsein. Man verlässt sich nicht mehr blind auf ferne Dekrete, sondern nimmt die Verwaltung der Heimat tatkräftig selbst in die Hand.",
+            "Marcus spürt auf seinen Wegen durch das Land, wie das alte Gefüge des Reiches wankt. Doch an der Küste hält er eisern an den überlieferten Werten der Ahnen fest.",
+            "Ein geheimnisvoller, alter Familienring, der seit Generationen weitergereicht wird, erinnert Marcus an die Legenden von Thüringer Kriegern. Er spürt, dass derselbe Stolz jetzt in der Ratsstube gebraucht wird.",
+            "In den Kontoren der Stadt hält Ordnung und Fleiß Einzug. Kultur und Wissenschaft erleben durch den regen Austausch mit den Gelehrten einen beispiellosen Höhenflug.",
+            "Die Jugend der Stadt begehrt auf und fordert deutsche Lieder im Gottesdienst. Marcus vermittelt besonnen zwischen den Generationen, um ein Aufbrechen alter Fehden zu verhindern.",
+            "Feindliche Schiffe bedrohen die Küstenregion. Als wehrhafter Bürger rüstet Marcus König eigene Verteidigungsmaßnahmen aus, um den freien Fluss des Lebens an den Gestaden zu sichern.",
+            "Das stolze Rathaus der Stadt wird zum Zentrum des Widerstands gegen fremde Steuereintreiber. Das Bürgertum weigert sich standhaft, seine alten Privilegien preiszugeben.",
+            "Die neue Kunst des Drucks revolutioniert das Leben. Marcus sorgt früh dafür, dass Luthers Schriften und neue Traktate unter das Volk gebracht werden, um den Geist zu schärfen.",
+            "Ein schwerer Winter bringt Eis und Not über die Küstenregion. In dieser Krise zeigt Marcus den alten Familiensinn und öffnet seine privaten Speicher für die Notleidenden der Stadt.",
+            "Sein ältester Sohn bricht auf, um an den Universitäten im Süden zu studieren. Das Erbe der Ahnen wandelt sich endgültig von der bloßen Waffengewalt hin zur geistigen Bildung.",
+            "Die alten Stadtmauern werden modernisiert und wehrhaft ausgebaut, um den neuen Waffen standzuhalten. Das Zeitalter der alten Burgen ist nun endgültig vorbei.",
+            "Marcus König blickt am Abend seines bewegten Lebens auf eine veränderte Welt, in der das freie Wort und der persönliche Glaube des Einzelnen an Bedeutung gewonnen haben.",
+            "Das alte Blut der Vorfahren hat sich gewandelt – vom wilden Krieger und ritterlichen Kreuzfahrer hin zum weisen, pflichtbewussten Gestalter der städtischen Gemeinschaft."
+        ]
+    },
+    5: {
+        numText: "Band 5",
+        titleShort: "Die Geschwister",
+        meta: "Dreißigjähriger Krieg · Das 17. Jahrhundert",
+        ytQuery: "die+geschwister+gustav+freytag+librivox",
+        cards: [
+            "DIE GESCHWISTER – Wir betreten das düstere und aufgewühlte 17. Jahrhundert. Das gesamte deutsche Land wird vom verheerenden Dreißigjährigen Krieg in den Abgrund gerissen, während marodierende Söldnerheere die alte Heimat der Ahnen bedrohen.",
+            "Inmitten dieser Epoche der Zerstörung entfaltet sich das Leben der Geschwister Georg und Wendy König. Das unbarmherzige Schicksal reißt die beiden inmitten der Kriegswirren und flammenden Dörfer auseinander.",
+            "Georg zieht als kühner Reiter im Regiment des schwedischen Königs Gustav Adolf durch die deutschen Lande, getrieben vom ungezähmten Mut seiner Väter und dem Schutz der neuen Ordnung.",
+            "Wendy hütet derweil unter ständiger Lebensgefahr den alten Familiensitz in Thüringen, wo Hunger und räuberische Banden an den schweren hölzernen Toren rütteln.",
+            "Kaiserliche Truppen und protestantische Heere wechseln sich im unerbittlichen Ringen um die Vorherrschaft ab, und jede Einquartierung bringt neue Angst in das geplagte Haus der Geschwister.",
+            "Auf den fernen Schlachtfeldern bei Lützen erfährt Georg die bittere Härte des modernen Krieges, in dem Pulverdampf und das Donnern der Kanonen das ritterliche Duell alter Zeiten ersetzen.",
+            "Wendy gelingt es durch kluge Verhandlungen mit einem durchziehenden Obristen, die Zerstörung des Heimatortes abzuwenden und die Frauen des Dorfes vor Gewalt zu schützen.",
+            "Der langanhaltende Konflikt lässt die Sitten verrohen, doch im Inneren der Geschwister brennt unerschütterlich der alte Familiensinn für Gerechtigkeit und christliche Menschlichkeit.",
+            "Ein heimlicher Briefwechsel zwischen den Lageren hält die Hoffnung der Geschwister wach, einander nach den langen Jahren der Trennung jemals gesund wiederzusehen.",
+            "Die Pest zieht als unsichtbarer, grauenvoller Feind durch die thüringischen Täler und fordert unter den Überlebenden des Krieges einen noch bittereren Tribut als das Schwert.",
+            "Georg wird in einem nächtlichen Reitergefecht schwer verwundet, findet jedoch Zuflucht bei einem friedlichen Pfarrer, der die Wunden im Geiste wahrer Nächstenliebe pflegt.",
+            "In der zerstörten Dorfkirche sammelt Wendy die verbliebenen Kinder, um ihnen trotz des Elends das Lesen und den Trost des alten Glaubens nahezubringen.",
+            "Gustav Freytag zeichnet das meisterhafte Bild einer zerrissenen Epoche, in der die alte heroische Freiheit der Ahnen im nackten Kampf ums Überleben geprüft wird.",
+            "Ein kostbarer, alter Siegelring, den Wendy wie ihren Augapfel hütet, bleibt das letzte sichtbare Band zu den glanzvollen Epochen der alten Vorfahren.",
+            "Als die Nachricht vom Westfälischen Frieden des Jahres 1648 endlich die Wälder erreicht, weinen die Menschen vor Erleichterung über das Ende des dreißigjährigen Sterbens.",
+            "Georg kehrt als reifer, vom Krieg gezeichneter Mann an den heimischen Herd zurück, wo ihn Wendy mit offenen Armen und tiefem Stolz empfängt.",
+            "Gemeinsam stehen die Geschwister vor den Trümmern des väterlichen Gutes und packen tatkräftig den beschwerlichen Wiederaufbau der thüringischen Heimat an.",
+            "Das Land blüht langsam wieder auf; neue Saaten werden in die von Kriegen zerfurchte Erde eingebracht und die zerstörten Fachwerkhäuser neu errichtet.",
+            "Kultur und Sprache verändern sich im beginnenden Barockzeitalter, doch das edle Blut und die Grundwerte der Familie bleiben rein und unbescholten.",
+            "Georg gründet eine neue Familie und gibt die alten, überlieferten Sagen von Ingo und den Zaunkönigen am wärmenden Herdfeuer an seine Kinder weiter.",
+            "Die nachfolgende Generation lernt aus den Erzählungen der Geschwister, dass wahrer Mut sich im geduldigen Wiederaufbau und dem Erhalt des Friedens zeigt.",
+            "Das bürgerliche Gesetz verdrängt das rohe Faustrecht der Söldnerjahre endgültig, und geordnete Gerichte sichern den Fleiß der ländlichen Gemeinschaft.",
+            "Wendy widmet ihr Alter der Chronik des Hauses und hält die Schicksale der Sippe für die nachkommenden Zeiten auf feinem Papier fest.",
+            "Der Stammbaum der Familie König verzweigt sich weiter, bereit für die kommenden Stürme und den tiefen Wandel der nächsten Jahrhunderte.",
+            "So schließt sich das bewegte Kapitel der Geschwister. Aus der Asche des großen Krieges erwächst die unbezähmbare Lebenskraft eines Volkes, das sich nicht bezwingen lässt."
+        ]
+    },
+    6: {
+        numText: "Band 6",
+        titleShort: "Aus einer kleinen Stadt",
+        meta: "Aufstieg Preußens · Befreiungskriege 1813",
+        ytQuery: "aus+einer+kleinen+stadt+gustav+freytag+librivox",
+        cards: [
+            "AUS EINER KLEINEN STADT – Das 18. Jahrhundert bricht an und bringt den unaufhaltsamen Aufstieg Preußens mit sich. Die alte Ahnensippe hat im bürgerlichen Milieu einer beschaulichen Stadt feste Wurzeln geschlagen.",
+            "Das geschäftige Treiben in den engen Gassen und der handwerkliche Fleiß bestimmen den Alltag der Familie König im thüringisch-preußischen Grenzgebiet.",
+            "Die strengen Reformen Friedrichs des Großen halten Einzug in das Leben der Bürger und fordern preußische Pflichtordnung und unbedingte Loyalität zum fernen Königsthron.",
+            "Das städtische Patriziat achtet streng auf Recht und Sitte, und die Nachkommen der alten Krieger bekleiden nun geachtete Ämter als Meister und Ratsmitglieder.",
+            "Kultur und Bildung erleben durch den regen Austausch mit den Universitäten einen ungeahnten Höhenflug, und das Buch verdrängt die alte mündliche Überlieferung.",
+            "Doch der tiefe Frieden der kleinen Stadt wird im Jahre 1806 jäh erschüttert, als die stolzen Heere Preußens bei Jena und Auerstedt vernichtend geschlagen werden.",
+            "Die napoleonischen Truppen fluten plündernd und fordernd durch die Gassen, und das private Heim der Ahnen wird von fremden Soldaten besetzt.",
+            "Die drückende Last der französischen Fremdherrschaft und die Demütigung des Vaterlandes wecken den alten, schlummernden Freiheitsdrang im Blute der Familie.",
+            "Im Verborgenen formiert sich der geheime Widerstand der Bürger, die unter dem Schutz der nächtlichen Dunkelheit Nachrichten und Waffen austauschen.",
+            "Das Jahr 1813 bringt den großen Wendepunkt der Geschichte, als der König von Preußen sein Volk mit flammenden Worten zum heiligen Befreiungskampf aufruft.",
+            "Ein unbändiger Funke nationaler Begeisterung erfasst die gesamte Bürgerschaft, und die Standesgrenzen zwischen Edelmann und Bürger schwinden im gemeinsamen Ziel.",
+            "Die Frauen der Familie opfern ihren Schmuck und weben Decken für die Soldaten, während die Männer sich freiwillig in die Listen der Jägerbataillone eintragen.",
+            "Unter den Tränen der Mütter und dem stolzen Jubel der Alten zieht die junge Generation der Familie König aus den Toren der Stadt in den Krieg für die Freiheit.",
+            "In den blutigen Gefechten der Völkerschlacht bei Leipzig stehen die Ahnen in den vordersten Reihen gegen die schwindende Macht des französischen Kaisers.",
+            "Der heroische Geist von Ingo und den ritterlichen Vorfahren erwacht in den Herzen der jungen Freiwilligen, die mutig ihr Leben für die Heimat in die Waagschale werfen.",
+            "Der glorreiche Sieg über die Tyrannei vertreibt die Besatzer endgültig aus dem deutschen Land und begründet eine neue, hoffnungsvolle Epoche des Aufbruchs.",
+            "Die Heimkehrer werden in der kleinen Stadt als Befreier gefeiert, doch viele Plätze am familiären Tisch bleiben für immer schmerzhaft leer.",
+            "Aus den Erfahrungen des großen Freiheitskrieges erwächst ein völlig neues, stolzes Selbstbewusstsein des gesamten deutschen Bürgertums.",
+            "Die alten Sagen der Ahnen werden nun mit den Berichten vom Marsch nach Paris verknüpft und fest im Gedächtnis der Enkel verankert.",
+            "Handwerk und Industrie beginnen das Gesicht der Landschaften zu verändern, und die erste Eisenbahn kündigt das moderne Zeitalter des Fortschritts an.",
+            "Die Familie hütet das Erbe der Väter durch den Wandel der Regierungsformen und bleibt eine feste Säule des städtischen Gemeinwesens.",
+            "Die Kunst des poetischen Realismus spiegelt sich im friedlichen Alltagsleben der Bürger wider, das Gustav Freytag mit liebevollem Pinselstrich zeichnet.",
+            "Die alten thüringischen Wälder stehen noch immer unverändert wie zu Ingos Zeiten und raunen den nachkommenden Kindern die Lieder der Vergangenheit zu.",
+            "Die Evolution vom wilden germanischen Krieger zum gebildeten, freien Staatsbürger hat sich in den Mauern dieser kleinen Stadt vollkommen vollzogen.",
+            "So endet der sechste Band als ein glänzendes Denkmal für den bürgerlichen Geist, die Pflicht und den unbezähmbaren Willen zur Freiheit."
+        ]
+    },
+    7: {
+        numText: "Gesamtwerk",
+        titleShort: "Schluss der Ahnen",
+        meta: "Geschichtsphilosophisches Vermächtnis des Dichters",
+        ytQuery: "die+ahnen+gustav+freytag+schluss+librivox",
+        cards: [
+            "Nun steht das gewaltige Werk vollendet vor uns. Ein weiter Bogen ist geschlagen, der fünfzehn Jahrhunderte des Werdens, Schafens und Kämpfens in sich begreift und die Seele unseres Volkes erlebbar macht.",
+            "Es ist das edle Vermächtnis einer unzerreißbaren Kette von Vätern und Söhnen, die durch Sturm und Not hindurch das Erbe der Urzeit getragen und im Wandel der Epochen niemals verleugnet haben.",
+            "Vom Geiste Ingos, der einst schutzsuchend durch das Dickicht ritt, führt der Pfad über ritterliche Tugend und bürgerlichen Fleiß hin zu jener Freiheit, die sich in Pflicht und Recht vollendet.",
+            "Wir blicken zurück auf die Trümmer der alten Burgen, auf die brennenden Täler des großen Sterbens und auf das Aufblühen der fleißigen Städte, in denen der Geist der Ahnen stets neu erwachte.",
+            "Es waren die ungenannten Leiden der Mütter und der feste, ungezähmte Mut der Männer, die das Fundament für das Haus gegossen haben, in welchem die nachkommenden Generationen nun friedlich wohnen dürfen.",
+            "Möge dieses große Buch den Enkeln ein treuer Spiegel sein, der ihnen zeigt, woher sie kamen, damit sie im Drangsale der Zukunft wissen, wer sie sind und welchen Stolz sie zu wahren haben.",
+            "Denn das Band der Ahnen reißt nicht ab mit dem letzten gedruckten Blatt. Es wird von jedem Herzen im Stillen weitergeschmiedet, das die Liebe zur Heimat und den Willen zur Freiheit in sich trägt.",
+            "So übergebe ich diese Chronik den Händen der Jugend. Sie ist das lebendige Zeugnis dafür, dass kein Opfer vergeblich war und der schöpferische Geist unseres Volkes ewig fortlebt.",
+            "Die Stimmen der Vorfahren verhallen im Strom der Zeit, doch ihr Erbe hallt in jedem modernen Menschen wider, der den Pfad des Rechts beschreitet.",
+            "Die alten thüringischen Wälder stehen noch immer, tief und schweigend, und raunen jedem Wanderer dieselbe Melodie von Freiheit und Treue zu.",
+            "Das Werk schließt nicht in Wehmut über das Vergangene, sondern im stolzen Glauben an die schöpferische Kraft der kommenden Geschlechter.",
+            "Mögen die Nachkommen das schwere Erbe der Väter nicht als Ruhekissen nutzen, sondern als täglichen Auftrag für die Gestaltung einer lichten Zukunft.",
+            "Vom rauen Faustrecht der Urzeit bis zur geordneten Pflicht des Staatsbürgers war es ein schmerzhafter, aber heroischer Weg, den dieses Buch bewahrt.",
+            "Die Kontore, die Klöster Thüringens und die Schlachtfelder der Vergangenheit werden in der Erinnerung zu einem einzigen, großen Vaterland verwoben.",
+            "Jeder Band dieser Saga bildet einen Baustein im großen Mosaik unseres gemeinsamen Selbstverständisses und unserer geschichtlichen Reife.",
+            "Der wahre Adel des Herzens, so zeigt uns die Chronik, zieht mit den Jahrhunderten um von den Zinnen der Raubritterfesten in die fleißigen Ratsstuben und Werkstätten.",
+            "Der unsichtbare rote Faden zeigt sich in der steten Bereitschaft der Vorfahren, das eigene Leben für das Wohl der Gemeinschaft in die Waagschale zu werfen.",
+            "Die Charaktere, die wir durch die Jahrhunderte begleiten durften, sind nun fest im Gedächtnis verankert und dienen als Vorbild für kommende Stürme.",
+            "Die Kunst des Wortes hat hier der nackten Geschichtswissenschaft eine lebendige, fühlende Seele eingehaucht, die zu uns spricht.",
+            "Das Werk entstand im stolzen Aufbruch einer neuen Zeit und soll den Bürgern ihrer eigenen Identität und großen Herkunft bewusst machen.",
+            "Die Evolution vom wilden Krieger zum gebildeten, freien Bürger hat sich im Laufe dieser Generationenkette vollkommen vollzogen.",
+            "Es ist die zeitlose Saga von Liebe, Glauben und dem unaufhaltsamen Werden eines ganzen Volkes durch alle Epochen hindurch.",
+            "Kein Tyrann und kein Krieg vermochte den Kern dieses Geschlechts zu brechen, das stets aus der Asche zu neuem Fleiß auferstand.",
+            "Die Kette der Ahnen bleibt offen, bereit, von den Taten der Lebenden mit jedem neuen Tag weitergeformt zu werden.",
+            "So vollendet sich das Gesamtwerk. Die Vergangenheit ist das feste Fundament der Gegenwart, und der Geist der Ahnen lebt ewig fort in uns."
+        ]
+    },
+    8: {
+        numText: "Autor",
+        titleShort: "Gustav Freytag",
+        meta: "Leben · Werk · Biografie des großen Chronisten",
+        ytQuery: "gustav+freytag+biographie",
+        cards: [
+            "Wir schreiben den 13. Juli 1816, als in der beschaulichen Stadt Kreuzburg in Oberschlesien ein Knabe geboren wird, der einst die Seele einer ganzen Nation in Worte fassen sollte: Gustav Freytag.",
+            "Im Hause des angesehenen Arztes und späteren Bürgermeisters wächst der junge Gustav wohlbehütet auf. Hier, im Grenzland zwischen den Kulturen, entwickelt er früh ein feines Gespür für Tradition und Geschichte.",
+            "Die weiten schlesischen Landschaften und die Erzählungen der Alten wecken im Knaben eine tiefe Sehnsucht nach der Vergangenheit. Er beginnt, jede Chronik und jedes alte Buch zu verschlingen, das er finden kann.",
+            "Der Pfad des Wissens führt den begabten Jüngling an die Universitäten von Breslau und Berlin, wo er sich mit brennendem Eifer dem Studium der deutschen Sprache, Literatur und Geschichte widmet.",
+            "Unter den großen Gelehrten seiner Zeit reift in Freytag die Erkenntnis, dass die Geschichte eines Volkes nicht nur aus Jahreszahlen besteht, sondern im alltäglichen Leben seiner Menschen wohnt.",
+            "Mit einer Promotion über die Anfänge der deutschen dramatischen Dichtung im Gepäck kehrt er nach Breslau zurück, um als junger Privatdozent die Herzen der Studenten für die alten Sprachschätze zu begeistern.",
+            "Doch die engen Mauern des Hörsaals werden dem strebsamen Geist bald zu eng. Ihn drängt es hinaus in die Welt, dorthin, wo das Schicksal der Gegenwart aktiv gestaltet und verhandelt wird.",
+            "Im Revolutionsjahr 1848 zieht es Freytag nach Leipzig. Gemeinsam mit Julian Schmidt übernimmt er die Redaktion der 'Grenzboten', einer Zeitschrift, die rasch zum Sprachrohr des liberalen Bürgertums aufsteigt.",
+            "Mit scharfer Feder und klarem Verstand streitet Freytag für Freiheit, Recht und die Einheit des zersplitterten deutschen Vaterlandes – Ideale, die fortan auch sein literarisches Schaffen leiten.",
+            "Im Jahr 1855 gelingt ihm der große literarische Durchbruch: Sein Roman 'Soll und Haben' erscheint und erobert die Herzen der Leser im Sturm. Es ist das Meisterwerk des bürgerlichen Realismus.",
+            "Freytag setzt dem fleißigen, pflichtbewussten Bürgertum ein unvergängliches Denkmal. Das Buch wird zum meistgelesenen deutschen Roman des 19. Jahrhunderts und macht ihn schlagartig berühmt.",
+            "Es folgen die Jahre auf dem gastlichen Gut Siebleben bei Gotha. Hier, im Herzen Thüringens, findet Freytag die innere Ruhe und die landschaftliche Inspiration für seine großen historischen Studien.",
+            "Mit den 'Bildern aus der deutschen Vergangenheit' schafft er ein monumentales kulturgeschichtliches Werk, das die Lebensweise der Vorfahren aus alten Urkunden lebendig auferstehen lässt.",
+            "Das Schicksal führt den Autor im Jahr 1870 direkt an die Schauplätze der großen Politik: Als Begleiter des preußischen Kronprinzen erlebt er den deutsch-französischen Krieg aus nächster Nähe im Hauptquartier.",
+            "Das tiefe Erleben des Krieges und die lang ersehnte Gründung des Deutschen Reiches im Jahr 1871 hinterlassen bleibende, ergreifende Eindrücke im Gemüt des reifen Dichters.",
+            "Inmitten des patriotischen Aufbruchs stellt sich Freytag eine gewaltige Frage: Wie kann man den Bürgern des neuen Reiches ein Bewusstsein für ihre gemeinsame Herkunft und Identität schenken?",
+            "Da reift in ihm ein kühner, beispielloser Plan: Ein monumentaler Romanzyklus soll entstehen, der das Schicksal einer einzigen thüringischen Familie durch alle Epochen der Geschichte begleitet.",
+            "Im Jahr 1872 greift er zur Feder und beginnt das Fundament zu legen. Die Saga der 'Ahnen' ist geboren – ein literarisches Denkmal, das von der Urzeit bis in die Gegenwart reichen soll.",
+            "Acht Jahre opfert Freytag diesem gigantischen Werk. Er forscht in Archiven, studiert alte Dialekte und webt seine tiefen kulturgeschichtlichen Erkenntnisse kunstvoll in die Erzählungen ein.",
+            "Es ist die tiefe Liebe zur Heimat und der unerschütterliche Glaube an die schöpferische Kraft des Volkes, die ihn durch die entbehrungsreichen Jahre der Arbeit an den sechs Bänden tragen.",
+            "Das Werk wird zu einem triumphallen Erfolg: Die Leser stürzen sich auf die Geschichten von Ingo, Ivo und Marcus König; die Charaktere werden zu vertrauten Begleitern in den Wohnzimmern des Reiches.",
+            "Im Alter zieht sich der hochgeehrte Dichterfürst in die Stille nach Wiesbaden zurück, wo er als weiser Ratgeber und Nestor der deutschen Literatur ein hohes Ansehen genießt.",
+            "Sein Blick auf das alternde Jahrhundert bleibt scharf, doch sein Herz ruht fest in jenen Werten, die er ein Leben lang besungen hat: Arbeit, Pflichtgefühl, Recht und bürgerliche Ehre.",
+            "Am 30. April 1895 schließt Gustav Freytag in Wiesbaden für immer die Augen. Sein Tod löst im ganzen Land tiefe Trauer aus, denn ein treuer Chronist der deutschen Seele ist gegangen.",
+            "Er hinterlässt ein unvergängliches literarisches Erbe. Mit den 'Ahnen' hat er eine Brücke der Erinnerung geschlagen, die die lebendige Kraft der Vergangenheit für alle Zeiten bewahrt."
+        ]
+    }
+};
+
+// Deine 38 präzise formulierten Gedanken-Lernkarten
+const gedankenCards = [
+    "Im Jahr 2026 fand ich mich eher zufällig in einem Antiquariat wieder. Dort stieß ich auf einen Namen, der mir bis dahin kaum etwas sagte: Gustav Freytag.",
+    "Obwohl er einst zu den bekanntesten und meistgelesenen deutschen Schriftstellern gehörte, war er mir in meiner gesamten Schulzeit niemals begegnet.",
+    "Weder im Deutschunterricht noch in anderen Zusammenhängen hatte ich jemals etwas über ihn erfahren. Diese Entdeckung machte mich neugierig.",
+    "Ich begann, mich näher mit Gustav Freytag und seinem Hauptwerk „Die Ahnen“ zu beschäftigen. Was zunächst als zufällige Begegnung mit einem alten Buch begann, entwickelte sich nach und nach zu einer intensiven Auseinandersetzung.",
+    "Die sechsbändige Romanreihe umfasst einen Zeitraum von vielen Jahrhunderten deutscher Geschichte. Mit Hilfe moderner KI-Werkzeuge verschaffte ich mir einen Überblick über alle sechs Bände.",
+    "Dadurch konnte ich Zusammenhänge erkennen, Figuren einordnen und die Entwicklung der dargestellten Familienlinien nachvollziehen.",
+    "Dabei wurde mir bewusst, welch gewaltiges literarisches Projekt Gustav Freytag mit den „Ahnen“ geschaffen hatte. Die Reihe war nicht nur ein Romanwerk.",
+    "Es war vielmehr auch ein Versuch, Geschichte, Kultur und gesellschaftliche Entwicklungen über Generationen hinweg erzählerisch darzustellen.",
+    "Je mehr ich über Freytag erfuhr, desto erstaunlicher fand ich seine damalige Bedeutung. Zu seiner Zeit war er un Bestsellerautor, dessen Werke von einem großen Publikum gelesen wurden.",
+    "Heute hingegen scheint er weitgehend aus dem allgemeinen Bewusstsein verschwunden zu sein. Dass ich erst im Alter von 65 Jahren überhaupt auf ihn aufmerksam wurde, empfinde ich als bemerkenswert.",
+    "Während meiner Recherchen stellte ich fest, dass es bis heute Menschen gibt, die sich mit seinem Werk beschäftigen und sein Andenken pflegen. Es existiert sogar ein Gustav-Freytag-Museum.",
+    "Das zeigte mir, dass sein Name keineswegs völlig vergessen ist, auch wenn er in der öffentlichen Wahrnehmung kaum noch präsent erscheint.",
+    "Gleichzeitig begegnete ich den kontroversen Diskussionen, die sich um seine Person und seine Werke entwickelt haben.",
+    "Besonders die Tatsache, dass seine Literatur in der Zeit des Nationalsozialismus genutzt und vereinnahmt wurde, wirft Fragen auf.",
+    "Für mich bedeutet das jedoch nicht automatisch, dass ein Werk allein dadurch eindeutig bewertet werden kann.",
+    "Vielmehr zeigt es, wie unterschiedlich Literatur in verschiedenen Zeiten interpretiert und verwendet werden kann.",
+    "Diese Erkenntnisse haben bei mir keine einfachen Antworten hinterlassen. Im Gegenteil: Viele Fragen erscheinen mir heute komplexer als zu Beginn meiner Beschäftigung mit Gustav Freytag.",
+    "Ich sehe Licht- und Schattenseiten, Zustimmung und Kritik, Anerkennung und Ablehnung. Gerade diese Ambivalenz macht das Thema für mich interessant.",
+    "Was mich an den „Ahnen“ besonders fasziniert, ist der Blick auf lange historische Entwicklungen.",
+    "Die Romane zeigen Menschen verschiedener Epochen mit ihren Hoffnungen, Ängsten, Erfolgen und Niederlagen.",
+    "Sie erinnern daran, dass Geschichte nicht nur aus Daten und Ereignissen besteht, sondern vor allem aus den Lebenswegen vieler einzelner Menschen.",
+    "Meine Beschäftigung mit Gustav Freytag war daher für mich weit mehr als das Lesen alter Literatur.",
+    "Sie wurde zu einer Reise in vergangene Denkweisen, historische Zusammenhänge und kulturelle Entwicklungen.",
+    "Dabei habe ich gelernt, dass manche Autoren erst dann interessant werden, wenn man bereit ist, sich selbst ein Bild von ihnen zu machen.",
+    "Heute betrachte ich Gustav Freytag weder als unfehlbaren Helden noch als Person, die sich auf einfache Schlagworte reduzieren lässt.",
+    "Ich sehe ihn als eine historische Persönlichkeit seiner Zeit, deren Werk Fragen aufwirft, Diskussionen auslöst und zum Nachdenken anregt.",
+    "Die Entdeckung eines einzelnen Buches in einem Antiquariat führte mich schließlich zu einer umfassenden Auseinandersetzung mit einer sechsbändigen Romanreihe, ihrem Autor und ihrer Wirkungsgeschichte.",
+    "Gerade diese unerwartete Reise macht Gustav Freytag und „Die Ahnen“ für mich zu einer der interessantesten literarischen Entdeckungen meines Jahres 2026.",
+    "Während meiner Recherchen entdeckte ich außerdem, dass die Werke Gustav Freytags heute teilweise als frei verfügbare Hörbücher zugänglich sind. Das weckte mein Interesse zusätzlich.",
+    "Die sechs Bände der „Ahnen“ sind so umfangreich, dass ich zunächst nach einer Möglichkeit suchte, mir einen verständlichen Gesamtüberblick zu verschaffen.",
+    "Mithilfe moderner KI gelang es mir, die Inhalte der einzelnen Bände einzuordnen, Zusammenhänge zu erkennen und die große Linie dieses Werkes besser zu verstehen.",
+    "Dadurch erhielt ich einen ersten Zugang zu einer Romanreihe, die mir zuvor völlig unbekannt gewesen war.",
+    "Aus dieser Beschäftigung heraus entstand die Idee, eine eigene Lern-App zu entwickeln.",
+    "Mein Ziel war es, einen einfachen Einstieg in Gustav Freytags Werk zu schaffen – nicht nur für andere Interessierte, sondern auch für mich selbst.",
+    "Die Lern-App soll dabei helfen, die wichtigsten Inhalte, Figuren, historischen Hintergründe und Zusammenhänge schnell zu erfassen und Neugier auf die eigentlichen Romane zu wecken.",
+    "Besonders spannend finde ich die Verbindung von klassischer Literatur und moderner Technik. Mithilfe der KI konnte ich Informationen strukturieren und aufbereiten.",
+    "Gleichzeitig habe ich die Möglichkeit entdeckt, die frei verfügbaren Hörbuchfassungen in die Lern-App einzubinden. Dadurch kann ich mich nun Schritt für Schritt mit den Romanen beschäftigen und sie in Form von Hörbüchern kennenlernen.",
+    "Ich habe die sechs Bände nicht vollständig gelesen. Vielmehr habe ich mir zunächst einen Überblick verschafft, um zu verstehen, worum es in diesem großen Werk überhaupt geht.",
+    "Gerade dieser erste Einblick hat meine Neugier geweckt. Die Lern-App ist deshalb nicht das Ergebnis einer abgeschlossenen Beschäftigung mit Gustav Freytag, sondern vielmehr der Beginn einer persönlichen Entdeckungsreise.",
+    "Heute sehe ich die Lern-App als eine Einladung, Gustav Freytag kennenzulernen. Sie soll Lust darauf machen, sich mit seinen Werken zu beschäftigen.",
+    "Für mich selbst ist sie zugleich ein Werkzeug, mit dem ich die „Ahnen“ nun Schritt für Schritt erkunden werde – unterstützt durch die Hörbücher, die mir einen unmittelbaren Zugang zu den ursprünglichen Texten ermöglichen."
+];
+
+// STANDARDFUNKTIONEN FÜR BÄNDE
+function render(){
+const h1 = document.getElementById("card-header-line1");
+const h2 = document.getElementById("card-header-line2");
+const txt = document.getElementById("card-text");
+
+h1.innerText = bandData[currentBand].numText;
+h2.innerText = bandData[currentBand].titleShort + " · Karte " + (i+1) + " / " + currentCards.length;
+txt.innerText = currentCards[i];
+
+speak();
+}
+
+function openBand(bandNum){
+currentBand = bandNum;
+currentCards = bandData[bandNum].cards;
+
+document.getElementById("band-meta").innerText = bandData[bandNum].meta;
+document.getElementById("home").style.display="none";
+document.getElementById("band").classList.add("active");
+i=0;
+render();
+}
+
+function next(){
+if(i<currentCards.length-1){
+i++;
+render();
+}
+}
+
+function prev(){
+if(i>0){
+i--;
+render();
+}
+}
+
+function autoNext(){
+next();
+}
+
+function speak(){
+speechSynthesis.cancel();
+speechSynthesis.speak(new SpeechSynthesisUtterance(currentCards[i]));
+}
+
+function openYT(){
+window.open("https://www.youtube.com/results?search_query=" + bandData[currentBand].ytQuery,"_blank");
+}
+
+
+// SPEZIELLE FUNKTIONEN FÜR MEINE GEDANKEN (38 KARTEN)
+function renderGedanken(){
+    const h2 = document.getElementById("gedanken-header-line2");
+    const txt = document.getElementById("gedanken-card-text");
+    
+    h2.innerText = "Persönliche Einordnung · Karte " + (gIndex+1) + " / " + gedankenCards.length;
+    txt.innerText = gedankenCards[gIndex];
+    
+    speakGedanken();
+}
+
+function gedankenNext(){
+    if(gIndex < gedankenCards.length - 1){
+        gIndex++;
+        renderGedanken();
+    }
+}
+
+function gedankenPrev(){
+    if(gIndex > 0){
+        gIndex--;
+        renderGedanken();
+    }
+}
+
+function speakGedanken(){
+    speechSynthesis.cancel();
+    speechSynthesis.speak(new SpeechSynthesisUtterance(gedankenCards[gIndex]));
+}
+
+
+// ALLGEMEINE SEITEN-STEUERUNG
+function openPage(id){
+document.getElementById("home").style.display="none";
+document.getElementById(id).classList.add("active");
+
+if(id === 'gedanken') {
+    gIndex = 0;
+    renderGedanken();
+}
+}
+
+function goHome(){
+speechSynthesis.cancel();
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById("band").classList.remove("active");
+document.getElementById("home").style.display="block";
+}
+
+/* MODAL STEUERUNG */
+function openModal(id) {
+    document.getElementById(id).style.display = "flex";
+}
+
+function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+}
+
+function closeModalOnBackdrop(event, id) {
+    if (event.target === document.getElementById(id)) {
+        closeModal(id);
+    }
+}
+
+</script>
+
+</body>
+</html>
